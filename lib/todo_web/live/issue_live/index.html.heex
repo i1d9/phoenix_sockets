@@ -1,0 +1,41 @@
+<h1>Listing Issues</h1>
+
+<%= if @live_action in [:new, :edit] do %>
+  <.modal return_to={Routes.issue_index_path(@socket, :index)}>
+    <.live_component
+      module={TodoWeb.IssueLive.FormComponent}
+      id={@issue.id || :new}
+      title={@page_title}
+      action={@live_action}
+      issue={@issue}
+      return_to={Routes.issue_index_path(@socket, :index)}
+    />
+  </.modal>
+<% end %>
+
+<table>
+  <thead>
+    <tr>
+      <th>Name</th>
+      <th>Completed</th>
+
+      <th></th>
+    </tr>
+  </thead>
+  <tbody id="issues">
+    <%= for issue <- @issues do %>
+      <tr id={"issue-#{issue.id}"}>
+        <td><%= issue.name %></td>
+        <td><%= issue.completed %></td>
+
+        <td>
+          <span><%= live_redirect "Show", to: Routes.issue_show_path(@socket, :show, issue) %></span>
+          <span><%= live_patch "Edit", to: Routes.issue_index_path(@socket, :edit, issue) %></span>
+          <span><%= link "Delete", to: "#", phx_click: "delete", phx_value_id: issue.id, data: [confirm: "Are you sure?"] %></span>
+        </td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>
+
+<span><%= live_patch "New Issue", to: Routes.issue_index_path(@socket, :new) %></span>

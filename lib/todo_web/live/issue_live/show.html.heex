@@ -1,0 +1,31 @@
+<h1>Show Issue</h1>
+
+<%= if @live_action in [:edit] do %>
+  <.modal return_to={Routes.issue_show_path(@socket, :show, @issue)}>
+    <.live_component
+      module={TodoWeb.IssueLive.FormComponent}
+      id={@issue.id}
+      title={@page_title}
+      action={@live_action}
+      issue={@issue}
+      return_to={Routes.issue_show_path(@socket, :show, @issue)}
+    />
+  </.modal>
+<% end %>
+
+<ul>
+
+  <li>
+    <strong>Name:</strong>
+    <%= @issue.name %>
+  </li>
+
+  <li>
+    <strong>Completed:</strong>
+    <%= @issue.completed %>
+  </li>
+
+</ul>
+
+<span><%= live_patch "Edit", to: Routes.issue_show_path(@socket, :edit, @issue), class: "button" %></span> |
+<span><%= live_redirect "Back", to: Routes.issue_index_path(@socket, :index) %></span>
